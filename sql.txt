@@ -1,0 +1,40 @@
+-- Tabla de usuarios general
+CREATE TABLE users (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    email VARCHAR(255) UNIQUE NOT NULL,
+    password VARCHAR(255) NOT NULL,
+    role ENUM('freelancer', 'company') NOT NULL,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Tabla freelancers
+CREATE TABLE freelancers (
+    user_id INT PRIMARY KEY,
+    full_name VARCHAR(100) NOT NULL,
+    skills TEXT NOT NULL,
+    expected_payment DECIMAL(10,2) NOT NULL,
+    cv_summary TEXT,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);
+
+-- Tabla empresas
+CREATE TABLE companies (
+    user_id INT PRIMARY KEY,
+    company_name VARCHAR(100) NOT NULL,
+    description TEXT,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);
+
+-- Tabla de contratos
+CREATE TABLE contracts (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    company_id INT NOT NULL,
+    freelancer_id INT NOT NULL,
+    proposed_payment DECIMAL(10,2) NOT NULL,
+    details TEXT NOT NULL,
+    status ENUM('pending', 'accepted', 'rejected') DEFAULT 'pending',
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    accepted_at DATETIME,
+    FOREIGN KEY (company_id) REFERENCES companies(user_id),
+    FOREIGN KEY (freelancer_id) REFERENCES freelancers(user_id)
+);
