@@ -1,4 +1,6 @@
 <?php
+require_once __DIR__ . '/../views/companies/dashboard.php';
+
 class UserModel extends BaseModel {
     private $db;
 

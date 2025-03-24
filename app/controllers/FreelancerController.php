@@ -1,13 +1,15 @@
 <?php
+require_once __DIR__ . '/../views/companies/dashboard.php';
+
 class FreelancerController {
     private $freelancerModel;
     private $projectModel;
     private $contractModel;
 
     public function __construct() {
-        $this->FreelancerModel = new FreelancerModel();
-        $this->ProjectModel = new ProjectModel();
-        $this->ContractModel = new ContractModel();
+        $this->freelancerModel = new FreelancerModel();
+        $this->projectModel = new ProjectModel();
+        $this->contractModel = new ContractModel();
     }
 
     public function dashboard() {
@@ -39,19 +41,24 @@ class FreelancerController {
         require_once 'views/freelancers/contracts.php';
     }
 
-    public function getOffers($freelancerId) {
-        $sql = "SELECT * FROM offers WHERE freelancer_id = ?";
-        $stmt = $this->db->prepare($sql);
-        $stmt->execute([$freelancerId]);
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
-    }
-
     public function viewOffers() {
         $this->checkFreelancerSession();
-        $offers = $this->freelancerModel->getOffers($_SESSION['user']['id']);
-        require_once 'views/freelancers/offers.php';
+        
+        try {
+            // Obtener ofertas disponibles
+            $offers = $this->offerModel->getAvailableOffers();
+            
+            // Cargar vista
+            require_once _DIR_ . '/../views/shared/header.php';
+            require_once _DIR_ . '/../views/freelancers/offers.php';
+            require_once _DIR_ . '/../views/shared/footer.php';
+            
+        } catch (Exception $e) {
+            $_SESSION['error'] = "Error al cargar las ofertas: " . $e->getMessage();
+            header("Location: /freelancer/dashboard");
+            exit();
+        }
     }
-
     private function checkFreelancerSession() {
         if (!isset($_SESSION['user'])) {
             header("Location: /login");

@@ -1,5 +1,6 @@
 <?php
 require_once 'BaseModel.php';
+require_once __DIR__ . '/../views/companies/dashboard.php';
 
 class BaseModel {
     private $db;
@@ -8,7 +9,7 @@ class BaseModel {
         $database = new Database();
         $this->db = $database->getInstance();
     }
-    
+
     public function createUser($email, $password, $role) {
         $sql = "INSERT INTO users (email, password, role) VALUES (?, ?, ?)";
         $stmt = $this->db->prepare($sql);

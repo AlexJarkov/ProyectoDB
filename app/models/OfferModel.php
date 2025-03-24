@@ -1,21 +1,21 @@
 <?php
-require_once __DIR__ . '/../config/database.php';
+require_once _DIR_ . '/../config/database.php';
+// Eliminado: require_once _DIR_ . '/../views/companies/dashboard.php';
 
-class OfferModel {
-    private $db;
+class OfferModel extends BaseModel {
+    public function getAvailableOffers() {
+        $sql = "SELECT 
+                o.*, 
+                c.company_name,
+                c.location,
+                c.industry
+            FROM offers o
+            JOIN companies c ON o.company_id = c.user_id
+            WHERE o.status = 'active'
+            ORDER BY o.created_at DESC";
 
-    public function __construct() {
-        $database = new Database();
-        $this->db = $database->getInstance();
-    }
-
-    public function getOffersForFreelancer($freelancerId) {
-        $sql = "SELECT o.*, comp.company_name 
-                FROM offers o 
-                JOIN companies comp ON o.company_id = comp.user_id
-                WHERE o.freelancer_id = ?";
         $stmt = $this->db->prepare($sql);
-        $stmt->execute([$freelancerId]);
+        $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 }

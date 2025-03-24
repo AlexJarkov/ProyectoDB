@@ -1,5 +1,7 @@
 <?php
 require_once __DIR__ . '/../config/database.php';
+require_once __DIR__ . '/../views/companies/dashboard.php';
+
 
 class ContractModel {
     private $db;
