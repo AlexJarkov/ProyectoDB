@@ -24,11 +24,16 @@ class Database {
         }
     }
 
+    // Devuelve la instancia única de la clase
     public static function getInstance() {
         if (!self::$instance) {
             self::$instance = new Database();
         }
-        return self::$instance->connection;
+        return self::$instance;
+    }
+
+    // Devuelve la conexión PDO
+    public function getConnection() {
+        return $this->connection;
     }
 }
-?>

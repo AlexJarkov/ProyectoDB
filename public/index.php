@@ -1,27 +1,35 @@
 <?php
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
+session_start();
 
-session_start(); // Debe estar al inicio
+require_once __DIR__ . '/../app/config/database.php';
+require_once __DIR__ . '/../app/models/BaseModel.php';
+require_once __DIR__ . '/../app/models/UserModel.php';
+require_once __DIR__ . '/../app/models/FreelancerModel.php';
+require_once __DIR__ . '/../app/models/CompanyModel.php';
 
-require_once __DIR__ . '/../app/controllers/FreelancerController.php';
+require_once __DIR__ . '/../app/controllers/AuthController.php';
 
-$request = $_SERVER['REQUEST_URI'];
-$freelancerController = new FreelancerController();
+$auth = new AuthController();
 
-switch ($request) {
-    case '/freelancers/dashboard':
-        $freelancerController->dashboard();
-        break;
-    case '/freelancers/contracts':
-        $freelancerController->viewContracts();
-        break;
-    case '/freelancers/offers':
-        $freelancerController->viewOffers();
-        break;
-    default:
-        http_response_code(404);
-        echo "404 Not Found";
-        break;
+// Verifica si el formulario envió una acción
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $action = $_POST['action'] ?? '';
+
+    switch ($action) {
+        case 'login':
+            $auth->login($_POST);
+            break;
+
+        case 'register':
+            $auth->register($_POST);
+            break;
+
+        default:
+            echo "Acción no reconocida.";
+    }
+
+} else {
+    echo "<h2>Accede desde un formulario</h2>";
 }
-?>
