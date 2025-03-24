@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__ . '/../config/database.php';
+require_once __DIR__ . '/../models/BaseModel.php'; // Asegúrate de que este archivo existe y define la clase BaseModel
 
 class OfferModel extends BaseModel {
     protected $db;

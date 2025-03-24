@@ -24,5 +24,18 @@ class UserModel extends BaseModel {
         $stmt->execute([$email]);
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
+    
+    /**
+     * Actualiza la fecha y hora del último inicio de sesión del usuario.
+     *
+     * @param int $userId ID del usuario
+     * @return bool Resultado de la actualización
+     */
+    public function updateLastLogin($userId) {
+        $currentDateTime = date('Y-m-d H:i:s');
+        $sql = "UPDATE users SET last_login = ? WHERE id = ?";
+        $stmt = $this->db->prepare($sql);
+        return $stmt->execute([$currentDateTime, $userId]);
+    }
 }
 ?>

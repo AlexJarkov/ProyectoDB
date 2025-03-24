@@ -7,8 +7,7 @@ class FreelancerModel {
 
     // Recibe la conexión a la base de datos por constructor
     public function __construct() {
-        $database = new Database();
-        $this->db = $database->getInstance();
+        $this->db = Database::getInstance();
     }
 
     // Método para crear un perfil de freelancer

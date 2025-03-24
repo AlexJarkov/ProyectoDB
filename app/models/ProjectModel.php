@@ -5,8 +5,8 @@ class ProjectModel {
     private $db;
 
     public function __construct() {
-        $database = new Database();
-        $this->db = $database->getInstance();
+        // Utilizar el método getInstance para obtener la conexión a la base de datos
+        $this->db = Database::getInstance();
     }
 
     /**
