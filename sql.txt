@@ -3,8 +3,35 @@ CREATE TABLE users (
     id INT PRIMARY KEY AUTO_INCREMENT,
     email VARCHAR(255) UNIQUE NOT NULL,
     password VARCHAR(255) NOT NULL,
-    role ENUM('freelancer', 'company') NOT NULL,
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+    role ENUM('company', 'freelancer') NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Tabla de Ofertas
+CREATE TABLE offers (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    company_id INT NOT NULL,
+    title VARCHAR(255) NOT NULL,
+    description TEXT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (company_id) REFERENCES users(id)
+);
+
+ALTER TABLE offers
+ADD COLUMN status ENUM('active', 'closed') DEFAULT 'active',
+ADD COLUMN budget DECIMAL(10,2) NOT NULL;
+
+-- Tabla proyectos
+CREATE TABLE projects (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    company_id INT NOT NULL,
+    title VARCHAR(255) NOT NULL,
+    description TEXT NOT NULL,
+    required_skills TEXT NOT NULL,
+    budget DECIMAL(10,2) NOT NULL,
+    status ENUM('open', 'in_progress', 'completed') DEFAULT 'open',
+    created_at DATETIME NOT NULL,
+    FOREIGN KEY (company_id) REFERENCES companies(user_id)
 );
 
 -- Tabla freelancers
