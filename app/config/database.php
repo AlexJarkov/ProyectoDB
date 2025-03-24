@@ -1,34 +1,49 @@
 <?php
-class Database {
-    private static $instance = null;
-    private $connection;
+require_once __DIR__ . '/../config/database.php';
 
-    private function __construct() {
-        $host = 'localhost';
-        $dbname = 'freelance_system';
-        $user = 'root';
-        $pass = '';
+class FreelancerModel {
+    private $db;
 
-        try {
-            $this->connection = new PDO(
-                "mysql:host=$host;dbname=$dbname;charset=utf8",
-                $user,
-                $pass,
-                [
-                    PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-                    PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC
-                ]
-            );
-        } catch(PDOException $e) {
-            die("Error de conexión: " . $e->getMessage());
-        }
+    public function __construct() {
+        $this->db = Database::getInstance(); // ✅ Esto ya es un PDO
     }
 
-    public static function getInstance() {
-        if (!self::$instance) {
-            self::$instance = new Database();
-        }
-        return self::$instance->connection;
+    public function createProfile($profileData) {
+        $sql = "INSERT INTO freelancers (
+            user_id, 
+            full_name, 
+            skills, 
+            expected_payment, 
+            cv_summary
+        ) VALUES (
+            :user_id, 
+            :full_name, 
+            :skills, 
+            :expected_payment, 
+            :cv_summary
+        )";
+
+        $stmt = $this->db->prepare($sql);
+        return $stmt->execute([
+            ':user_id' => $profileData['user_id'],
+            ':full_name' => $profileData['full_name'],
+            ':skills' => $profileData['skills'],
+            ':expected_payment' => $profileData['expected_payment'],
+            ':cv_summary' => $profileData['cv_summary']
+        ]);
+    }
+
+    public function getProfile($user_id) {
+        $sql = "SELECT * FROM freelancers WHERE user_id = :user_id";
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute([':user_id' => $user_id]);
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+
+    public function getAllFreelancers() {
+        $sql = "SELECT * FROM freelancers";
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 }
-?>
