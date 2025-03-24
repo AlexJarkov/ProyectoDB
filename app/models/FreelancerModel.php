@@ -1,16 +1,15 @@
 <?php
 // models/FreelancerModel.php
+require_once __DIR__ . '/../config/database.php';
 
 class FreelancerModel {
     private $db;
-    private $freelancers;
 
-    // Recibe la conexión a la base de datos por constructor
     public function __construct() {
-        $this->db = Database::getInstance();
+        $this->db = Database::getInstance(); // ✅ si getInstance() ya devuelve el PDO
     }
 
-    // Método para crear un perfil de freelancer
+    // Crear perfil de freelancer
     public function createProfile($profileData) {
         $sql = "INSERT INTO freelancers (
             user_id, 
@@ -36,7 +35,6 @@ class FreelancerModel {
         ]);
     }
 
-    // Otros métodos útiles (ejemplos)
     public function getProfile($user_id) {
         $sql = "SELECT * FROM freelancers WHERE user_id = :user_id";
         $stmt = $this->db->prepare($sql);
@@ -45,10 +43,10 @@ class FreelancerModel {
     }
 
     public function getAllFreelancers() {
-        $sql = "SELECT * FROM freelancers"; 
+        $sql = "SELECT * FROM freelancers";
         $stmt = $this->db->prepare($sql);
         $stmt->execute();
-        return $stmt->fetchAll(PDO::FETCH_ASSOC); // Devuelve los freelancers como un array
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 }
 ?>
