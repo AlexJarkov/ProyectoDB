@@ -25,6 +25,22 @@ class FreelancerController {
         require_once __DIR__ . '/../views/freelancers/dashboard.php';
     }
 
+    public function showDashboard() {
+
+        // Obtener la lista de freelancers desde el modelo
+        $freelancers = $this->freelancerModel->getAllFreelancers();
+        $freelancers = $this->freelancerModel->freelancers;
+    
+        // Verificar si se están obteniendo freelancers
+        if ($freelancers === false) {
+            echo "Error al obtener freelancers.";
+            return;
+        }
+    
+        // Pasar la variable a la vista
+        require_once __DIR__ . '/../views/companies/dashboard.php';
+    }
+
     public function viewProfile() {
         $this->checkFreelancerSession();
         $profile = $this->freelancerModel->getProfile($_SESSION['user']['id']);

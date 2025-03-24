@@ -4,6 +4,7 @@ require_once __DIR__ . '/../views/companies/dashboard.php';
 
 class FreelancerModel {
     private $db;
+    private $freelancers;
 
     // Recibe la conexión a la base de datos por constructor
     public function __construct() {
@@ -42,6 +43,15 @@ class FreelancerModel {
         $stmt = $this->db->prepare($sql);
         $stmt->execute([':user_id' => $user_id]);
         return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+
+    public function getAllFreelancers(): void {
+        $sql = "SELECT * FROM freelancers"; // Asegúrate de que tu tabla se llame "freelancers"
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute();
+        
+        // Almacenar los resultados en una propiedad de la clase
+        $this->freelancers = $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 }
 ?>
