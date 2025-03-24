@@ -27,7 +27,7 @@ class FreelancerController {
 
     public function showDashboard() {
         // Obtener la lista de freelancers desde el modelo
-        $freelancers = $this->freelancerModel->getAllFreelancers();
+        $freelancers = $this->freelancerModel->getAllFreelancers(); // Aquí debe ir el método adecuado
         
         // Verificar si se están obteniendo freelancers
         if ($freelancers === false) {

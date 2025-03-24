@@ -45,13 +45,11 @@ class FreelancerModel {
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
-    public function getAllFreelancers(): void {
-        $sql = "SELECT * FROM freelancers"; // Asegúrate de que tu tabla se llame "freelancers"
+    public function getAllFreelancers() {
+        $sql = "SELECT * FROM freelancers"; 
         $stmt = $this->db->prepare($sql);
         $stmt->execute();
-        
-        // Almacenar los resultados en una propiedad de la clase
-        $this->freelancers = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC); // Devuelve los freelancers como un array
     }
 }
 ?>
