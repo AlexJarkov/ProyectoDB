@@ -1,6 +1,5 @@
 <?php
 // models/FreelancerModel.php
-require_once __DIR__ . '/../views/companies/dashboard.php';
 
 class FreelancerModel {
     private $db;

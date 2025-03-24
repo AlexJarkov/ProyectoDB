@@ -1,7 +1,9 @@
 <?php
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
-session_start();
+
+session_start(); // Debe estar al inicio
+
 require_once __DIR__ . '/../app/controllers/FreelancerController.php';
 
 $request = $_SERVER['REQUEST_URI'];

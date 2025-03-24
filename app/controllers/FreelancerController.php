@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__ . '/../views/companies/dashboard.php';
+require_once __DIR__ . '/../views/freelancers/dashboard.php';
 require_once __DIR__ . '/../models/FreelancerModel.php';
 require_once __DIR__ . '/../models/ProjectModel.php';
 require_once __DIR__ . '/../models/ContractModel.php';
@@ -20,23 +21,38 @@ class FreelancerController {
     }
 
     public function dashboard() {
-        $this->checkFreelancerSession();
+        $this->checkFreelancerSession(); // Redirige si no hay sesión
+        
+        // Obtener datos del perfil
         $profile = $this->freelancerModel->getProfile($_SESSION['user']['id']);
+        
+        // Verificar si el perfil existe
+        if (!$profile) {
+            $_SESSION['error'] = "Perfil no encontrado";
+            header("Location: /login");
+            exit();
+        }
+        
+        // Pasar variables a la vista
         require_once __DIR__ . '/../views/freelancers/dashboard.php';
     }
 
     public function showDashboard() {
-        // Obtener la lista de freelancers desde el modelo
-        $freelancers = $this->freelancerModel->getAllFreelancers(); // Aquí debe ir el método adecuado
-        
-        // Verificar si se están obteniendo freelancers
-        if ($freelancers === false) {
-            echo "Error al obtener freelancers.";
-            return;
+        try {
+            $freelancers = $this->freelancerModel->getAllFreelancers();
+            
+            if (empty($freelancers)) {
+                throw new Exception("No se encontraron freelancers.");
+            }
+            
+            require_once __DIR__ . '/../views/freelancers/dashboard.php';
+            
+        } catch (Exception $e) {
+            error_log($e->getMessage()); // Registra el error
+            $_SESSION['error'] = "Error al cargar el dashboard: " . $e->getMessage();
+            header("Location: /error-page");
+            exit();
         }
-        
-        // Pasar la variable a la vista
-        require_once __DIR__ . '/../views/companies/dashboard.php';
     }
 
     public function viewProfile() {
@@ -83,6 +99,7 @@ class FreelancerController {
 
     private function checkFreelancerSession() {
         if (!isset($_SESSION['user'])) {
+            // Redirige ANTES de cualquier salida HTML
             header("Location: /login");
             exit();
         }
