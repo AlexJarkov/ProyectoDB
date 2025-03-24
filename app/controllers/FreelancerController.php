@@ -49,9 +49,9 @@ class FreelancerController {
             $offers = $this->offerModel->getAvailableOffers();
             
             // Cargar vista
-            require_once _DIR_ . '/../views/shared/header.php';
-            require_once _DIR_ . '/../views/freelancers/offers.php';
-            require_once _DIR_ . '/../views/shared/footer.php';
+            require_once __DIR__ . '/../views/shared/header.php';
+            require_once __DIR__ . '/../views/freelancers/offers.php';
+            require_once __DIR__ . '/../views/shared/footer.php';
             
         } catch (Exception $e) {
             $_SESSION['error'] = "Error al cargar las ofertas: " . $e->getMessage();
