@@ -1,6 +1,3 @@
-// public/index.php
-$router->get('/companies/dashboard', 'CompaniesController@dashboard');
-
 <?php
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
@@ -15,10 +12,10 @@ switch ($request) {
         $freelancerController->dashboard();
         break;
     case '/freelancers/contracts':
-        $freelancerController->contracts();
+        $freelancerController->viewContracts();
         break;
     case '/freelancers/offers':
-        $freelancerController->offers();
+        $freelancerController->viewOffers();
         break;
     default:
         http_response_code(404);

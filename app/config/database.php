@@ -1,24 +1,34 @@
 <?php
 class Database {
-    private $host = 'localhost';
-    private $db_name = 'freelance_system';
-    private $username = 'root';
-    private $password = '';
-    public $conn;
+    private static $instance = null;
+    private $connection;
 
-    public function getConnection() {
-        $this->conn = null;
+    private function __construct() {
+        $host = 'localhost';
+        $dbname = 'freelance_system';
+        $user = 'root';
+        $pass = '';
+
         try {
-            $this->conn = new PDO(
-                "mysql:host=" . $this->host . ";dbname=" . $this->db_name,
-                $this->username,
-                $this->password
+            $this->connection = new PDO(
+                "mysql:host=$host;dbname=$dbname;charset=utf8",
+                $user,
+                $pass,
+                [
+                    PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+                    PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC
+                ]
             );
-            $this->conn->exec("set names utf8");
-        } catch(PDOException $exception) {
-            echo "Error de conexión: " . $exception->getMessage();
+        } catch(PDOException $e) {
+            die("Error de conexión: " . $e->getMessage());
         }
-        return $this->conn;
+    }
+
+    public static function getInstance() {
+        if (!self::$instance) {
+            self::$instance = new Database();
+        }
+        return self::$instance->connection;
     }
 }
 ?>

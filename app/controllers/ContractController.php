@@ -35,7 +35,7 @@ class ContractController {
         if ($_SESSION['user']['role'] === 'company') {
             $contracts = $this->contractModel->getCompanyContracts($_SESSION['user']['id']);
         } else {
-            $contracts = $this->contractModel->getFreelancerContracts($_SESSION['user']['id']);
+            $contracts = $this->contractModel->getContractsByFreelancer($_SESSION['user']['id']);
         }
         require_once 'views/contracts/list.php';
     }

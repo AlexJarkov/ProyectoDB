@@ -183,26 +183,5 @@ class AuthController {
             'description' => !empty($data['description']) ? htmlspecialchars($data['description']) : null
         ]);
     }
-
-    private function sendVerificationEmail($email, $token) {
-        // Implementar lógica de envío de email
-        $verificationLink = "https://tudominio.com/verify-email?token=$token";
-        // Usar PHPMailer o servicio de correo
-    }
-
-    // Método para verificación de email
-    public function verifyEmail($token) {
-        $user = $this->userModel->getUserByVerificationToken($token);
-        
-        if ($user) {
-            $this->userModel->markAsVerified($user['id']);
-            $_SESSION['user']['verified'] = true;
-            header("Location: /{$user['role']}/dashboard?verified=1");
-        } else {
-            $_SESSION['errors'] = ['Token de verificación inválido'];
-            header("Location: /login");
-        }
-        exit();
-    }
 }
 ?>
